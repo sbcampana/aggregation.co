@@ -21,7 +21,7 @@ foreach ($rows as $feed) {
 	$content = new SimplePie();
 	$content->set_feed_url($feed['link']);
 	$content->enable_order_by_date(false);
-	$content->set_cache_location($_SERVER['DOCUMENT_ROOT'] . '/cache');
+	$content->set_cache_location($_SERVER['DOCUMENT_ROOT'] . 'aggregation.co/cache');
 	$content->init();
 
 	echo "<div>";
