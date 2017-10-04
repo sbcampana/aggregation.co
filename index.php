@@ -12,7 +12,7 @@ $use_sources3[] = array();
 $flag;
 //echo sizeof($use_sources);
 //echo array_pop($use_sources);
-if(isset($_POST['filter']) == !NULL){
+if(isset($_POST['filter']) != NULL){
     $flag = 1;
     echo "You Filtered stuff";
     $temp1 = $_POST['sourceList'];
@@ -32,6 +32,7 @@ if(isset($_POST['submit']) == !NULL){
     $col = RealEscapeString($db,$_POST['col']);
     $query1 = "INSERT INTO feeds (displayColumn, link) VALUE (". $col .", ". $rss . ")";
     Query($db, $query1);
+    shell_exec('./fetchall.sh');
 }
 
 // This will be a function that returns the number of distinct feed titles from the items database which will be used to generate a check box for each
@@ -98,67 +99,67 @@ echo "<div id=\"content\">\n";
             //foreach($use_sources as $temp_source){
             if ($length > 1){
                 $query .= "(";
-                echo($length);
-                for($i = 0; $i < $length; $i++) {
-                    $query .= "items.itemTitle='" . array_pop($use_sources) . "' OR ";
+                //echo($length);
+                for($i = 0; $i < $length-1; $i++) {
+                    $query .= "items.feedTitle='" . array_pop($use_sources) . "' OR ";
                 }
-                $query .= "items.itemTitle=" . array_pop($use_sources) . "));";
+                $query .= "items.feedTitle='" . array_pop($use_sources) . "');";
             }
             if($length == 1) {
-                $query .= "items.itemTitle='" . array_pop($use_sources) . "'";
+                $query .= "items.feedTitle='" . array_pop($use_sources) . "'";
             }
 
         }
-        echo $query;
+        //echo $query;
         DisplayColumn($db, $query);
 
     echo "</div>\n";
     echo "<div id=\"content-middle\">\n";
 
-        $query = "SELECT items.id AS id,feedTitle,feedLink,itemTitle,itemPubDate,itemLink,itemDesc FROM feeds,items WHERE feeds.displayColumn=2 AND feeds.id=items.id";
+        $query2 = "SELECT items.id AS id,feedTitle,feedLink,itemTitle,itemPubDate,itemLink,itemDesc FROM feeds,items WHERE feeds.displayColumn=2 AND feeds.id=items.id";
         if($flag == 1){
             $length = sizeof($use_sources2)-1;
-            $query .= " AND ";
+            $query2 .= " AND ";
             //foreach($use_sources as $temp_source){
             if ($length > 1){
-                $query .= "(";
-                echo($length);
-                for($i = 0; $i < $length; $i++) {
-                    $query .= "items.itemTitle='" . array_pop($use_sources2) . "' OR ";
+                $query2 .= "(";
+                //echo($length);
+                for($i = 0; $i < $length-1; $i++) {
+                    $query2 .= "items.feedTitle='" . array_pop($use_sources2) . "' OR ";
                 }
-                $query .= "items.itemTitle=" . array_pop($use_sources2) . ")";
+                $query2 .= "items.feedTitle='" . array_pop($use_sources2) . "')";
             }
             if($length == 1) {
-                $query .= "items.itemTitle='" . array_pop($use_sources2) . "'";
+                $query2 .= "items.feedTitle='" . array_pop($use_sources2) . "'";
             }
 
         }
-        echo $query;
-        DisplayColumn($db, $query);
+        //echo $query2;
+        DisplayColumn($db, $query2);
 
     echo "</div>\n";
     echo "<div id=\"content-right\">\n";
 
-        $query = "SELECT items.id AS id,feedTitle,feedLink,itemTitle,itemPubDate,itemLink,itemDesc FROM feeds,items WHERE feeds.displayColumn=3 AND feeds.id=items.id";
+        $query3 = "SELECT items.id AS id,feedTitle,feedLink,itemTitle,itemPubDate,itemLink,itemDesc FROM feeds,items WHERE feeds.displayColumn=3 AND feeds.id=items.id";
         if($flag == 1){
             $length = sizeof($use_sources3)-1;
-            $query .= " AND ";
+            $query3 .= " AND ";
             //foreach($use_sources as $temp_source){
             if ($length > 1){
-                $query .= "(";
-                echo($length);
-                for($i = 0; $i < $length; $i++) {
-                    $query .= "items.itemTitle='" . array_pop($use_sources3) . "' OR ";
+                $query3 .= "(";
+                //echo($length);
+                for($i = 0; $i < $length-1; $i++) {
+                    $query3 .= "items.feedTitle='" . array_pop($use_sources3) . "' OR ";
                 }
-                $query .= "items.itemTitle=" . array_pop($use_sources3) . ")";
+                $query3 .= "items.feedTitle='" . array_pop($use_sources3) . "')";
             }
             if($length == 1)  {
-                $query .= "items.itemTitle='" . array_pop($use_sources3) . "'";
+                $query3 .= "items.feedTitle='" . array_pop($use_sources3) . "'";
             }
 
         }
-        echo $query;
-        DisplayColumn($db, $query);
+        //echo $query3;
+        DisplayColumn($db, $query3);
 
     echo "</div>\n";
 echo "</div>\n";
