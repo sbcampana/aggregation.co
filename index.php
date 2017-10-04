@@ -6,21 +6,37 @@ require("include/rss_util.php");
 
 // Create a function that will filter out the news sources we don't want to see based on a checkbox menu
 // The checkbox menu will run a query to pull the number of distinct news sources we have in the table
+if(isset($_POST['filter'])){
+    echo "You Filtered stuff";
+}
 
 // This will be a function that returns the number of distinct feed titles from the items database which will be used to generate a check box for each
 function get_sources($db){
+    $sourceList[] = array();
     $source_query = "SELECT DISTINCT feedTitle FROM items";
     $sources = Query($db, $source_query);
+    //echo $sources[0];
+    /*foreach($sources as $source){
+        //echo array_pop($source);
+        $title = $source['feedTitle'];
+        //echo $title;
+        array_push($sourceList, $title);
+    }*/
     return $sources;
 }
 
 // Create a form around this for a POST, and add the chunk of code above that will check if submit has been pressed and if it has add the new rss feed to the database and run fetshsimplepie script
+echo "<form method='post' action='index.php' id='rss_form'>";
 echo "<label>Add an RSS link to your feed</label>\t";
 echo "<input name='input' id='input' placeholder='RSS Link'>";
+echo "<br>";
+echo "<input type='submit' name='submit' value='submit'>";
+echo "</form>";
 // add a submit button that will update the database
 
 
 $sources = get_sources($db);
+echo "<form method='post' action='index.php' id='filter'>";
 echo "<div class='row'>";
 echo"<div class='col-md-6'>";
 foreach($sources as $source){
@@ -31,17 +47,25 @@ foreach($sources as $source){
     // id=$source
     // The label is $source
     echo "<label>";
+    $title = $source['feedTitle'];
+    //echo "hello";
     //checkbox goes here
+    echo "<input type='checkbox' name='sourceList[]' value='" . $title ."' id='". $title ."'>" . $title;
+    echo "<br>";
     echo "</label>";
+
 }
+echo "<input type='submit' name='filter' value='filter'>";
 echo "</div>";
 echo "</div>";
+echo "</form>";
 
 echo "<div id=\"content\">\n";
     echo "<div id=\"content-left\">\n";
 
         $query = "SELECT items.id AS id,feedTitle,feedLink,itemTitle,itemPubDate,itemLink,itemDesc FROM feeds,items WHERE feeds.displayColumn=1 AND feeds.id=items.id";
         //create a for loop that will run for each element in the list of items that need to be added to the where clause because those the the news sources we want to include.
+
         DisplayColumn($db, $query);
 
     echo "</div>\n";
